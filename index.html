@@ -3,9 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Omar Yasser | Portfolio</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>Omar Yasser | AI & Full-Stack Engineer</title>
+    <meta name="description" content="Omar Yasser — AI, Machine Learning and Full-Stack Developer building precise, data-driven products. Explore projects, experience, and certifications.">
+    <meta name="theme-color" content="#0D0D0D">
+    <meta property="og:title" content="Omar Yasser | AI & Full-Stack Engineer">
+    <meta property="og:description" content="AI, Machine Learning and Full-Stack Developer crafting data-driven products.">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary">
 
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <noscript><style>.fade-in { opacity: 1 !important; transform: none !important; }</style></noscript>
 
     <style>
     /* Global Styles */
@@ -20,13 +31,691 @@
         --accent-color: #FF6584;
         --gradient-1: linear-gradient(135deg, #6C63FF 0%, #4D44DB 100%);
         --gradient-2: linear-gradient(270deg, #6C63FF, #4D44DB);
+
+        /* Premium additions (kept alongside originals so nothing else breaks) */
+        --cyan-glow: #5EEAD4;
+        --violet-glow: #A78BFA;
+        --glass-bg: rgba(255, 255, 255, 0.04);
+        --glass-border: rgba(255, 255, 255, 0.08);
+        --gradient-mesh: radial-gradient(at 20% 20%, rgba(108, 99, 255, 0.18) 0px, transparent 50%),
+                         radial-gradient(at 80% 0%, rgba(94, 234, 212, 0.10) 0px, transparent 50%),
+                         radial-gradient(at 0% 100%, rgba(255, 101, 132, 0.10) 0px, transparent 50%);
+        --font-display: 'Space Grotesk', 'Segoe UI', sans-serif;
+        --font-body: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        --font-mono: 'JetBrains Mono', monospace;
+        --ease-premium: cubic-bezier(0.16, 1, 0.3, 1);
     }
+
+
+/* ==========================================================================
+   ADMIN MODE — styles (appended, does not alter any existing rule above)
+   ========================================================================== */
+#admin-root, #admin-root * { box-sizing: border-box; }
+#admin-root { font-family: var(--font-body); }
+
+.admin-hidden { display: none !important; }
+
+/* Small trigger button, bottom-right, unobtrusive */
+.admin-trigger-btn {
+    position: fixed;
+    bottom: 22px;
+    right: 22px;
+    z-index: 9990;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    border-radius: 999px;
+    background: rgba(20, 20, 24, 0.65);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--glass-border);
+    color: var(--text-light);
+    font-size: 0.78rem;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    cursor: pointer;
+    transition: all 0.35s var(--ease-premium);
+    opacity: 0.55;
+}
+.admin-trigger-btn:hover {
+    opacity: 1;
+    color: #fff;
+    border-color: var(--primary-color);
+    box-shadow: 0 8px 24px rgba(108, 99, 255, 0.35), 0 0 0 6px rgba(108,99,255,0.08);
+    transform: translateY(-2px);
+}
+.admin-trigger-btn i { font-size: 0.85rem; color: var(--primary-color); }
+
+/* Overlay */
+.admin-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(8, 8, 10, 0.72);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    z-index: 9998;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    opacity: 0;
+    transition: opacity 0.3s var(--ease-premium);
+}
+.admin-overlay.show { opacity: 1; }
+
+/* Generic modal shell */
+.admin-modal {
+    width: 100%;
+    background: linear-gradient(180deg, rgba(30,30,34,0.98), rgba(18,18,20,0.98));
+    border: 1px solid var(--glass-border);
+    border-radius: 18px;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.55), 0 0 0 1px rgba(108,99,255,0.06), 0 0 120px rgba(108,99,255,0.08);
+    color: var(--text-color);
+    transform: translateY(18px) scale(0.98);
+    opacity: 0;
+    transition: all 0.35s var(--ease-premium);
+    max-height: 88vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    position: relative;
+}
+.admin-modal::before {
+    content: "";
+    position: absolute;
+    inset: -1px;
+    padding: 1px;
+    border-radius: 18px;
+    background: linear-gradient(135deg, rgba(108,99,255,0.35), transparent 30%, transparent 70%, rgba(94,234,212,0.25));
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+    z-index: 1;
+}
+.admin-overlay.show .admin-modal { transform: translateY(0) scale(1); opacity: 1; }
+
+.admin-modal--sm { max-width: 420px; }
+.admin-modal--md { max-width: 620px; }
+.admin-modal--lg { max-width: 880px; }
+.admin-modal--xl { max-width: 1080px; }
+
+.admin-modal-header {
+    padding: 24px 26px;
+    border-bottom: 1px solid var(--glass-border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-shrink: 0;
+    background: var(--gradient-mesh);
+    position: relative;
+    overflow: hidden;
+}
+.admin-modal-header::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, var(--primary-color), var(--cyan-glow), var(--accent-color), var(--primary-color));
+    background-size: 300% 100%;
+    animation: adminShimmer 6s linear infinite;
+}
+@keyframes adminShimmer { 0% { background-position: 0% 0; } 100% { background-position: 300% 0; } }
+.admin-modal-header h3 {
+    font-family: var(--font-display);
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+.admin-modal-header h3 i {
+    color: var(--primary-color);
+    width: 34px; height: 34px;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 10px;
+    background: rgba(108,99,255,0.14);
+    box-shadow: 0 0 0 1px rgba(108,99,255,0.25), 0 0 18px rgba(108,99,255,0.25);
+}
+.admin-modal-close {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid var(--glass-border);
+    color: var(--text-light);
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.25s var(--ease-premium);
+}
+.admin-modal-close:hover { background: var(--accent-color); color: #fff; border-color: var(--accent-color); transform: rotate(90deg); }
+
+.admin-modal-body { padding: 24px 26px; overflow-y: auto; }
+.admin-modal-footer {
+    padding: 16px 26px;
+    border-top: 1px solid var(--glass-border);
+    display: flex; align-items: center; justify-content: flex-end; gap: 10px;
+    flex-shrink: 0;
+}
+
+/* Buttons */
+.admin-btn {
+    font-family: var(--font-body);
+    font-size: 0.85rem;
+    font-weight: 600;
+    padding: 10px 18px;
+    border-radius: 10px;
+    border: 1px solid var(--glass-border);
+    background: rgba(255,255,255,0.05);
+    color: var(--text-color);
+    cursor: pointer;
+    display: inline-flex; align-items: center; gap: 8px;
+    transition: all 0.25s var(--ease-premium);
+}
+.admin-btn:hover { background: rgba(255,255,255,0.1); transform: translateY(-1px); }
+.admin-btn-primary {
+    background: var(--gradient-1);
+    border: none;
+    color: #fff;
+    box-shadow: 0 8px 20px rgba(108,99,255,0.3);
+    position: relative;
+    overflow: hidden;
+}
+.admin-btn-primary::before {
+    content: "";
+    position: absolute;
+    top: 0; left: -60%;
+    width: 40%; height: 100%;
+    background: linear-gradient(115deg, transparent, rgba(255,255,255,0.35), transparent);
+    transform: skewX(-20deg);
+    transition: left 0.6s var(--ease-premium);
+}
+.admin-btn-primary:hover::before { left: 130%; }
+.admin-btn-primary:hover { box-shadow: 0 10px 26px rgba(108,99,255,0.45); transform: translateY(-2px); }
+.admin-btn-danger { background: rgba(255, 82, 82, 0.12); border-color: rgba(255, 82, 82, 0.35); color: #ff8a8a; }
+.admin-btn-danger:hover { background: #ff5252; color: #fff; border-color: #ff5252; }
+.admin-btn-sm { padding: 6px 12px; font-size: 0.76rem; border-radius: 8px; }
+.admin-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+.admin-btn:active, .admin-trigger-btn:active, .admin-showall-btn:active { transform: scale(0.96); }
+.admin-template-card:active { transform: translateY(-1px) scale(0.98); }
+
+/* Form fields */
+.admin-field { margin-bottom: 16px; }
+.admin-field label {
+    display: block;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--text-light);
+    margin-bottom: 7px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+.admin-field input[type="text"],
+.admin-field input[type="password"],
+.admin-field input[type="url"],
+.admin-field input[type="number"],
+.admin-field select,
+.admin-field textarea {
+    width: 100%;
+    padding: 11px 14px;
+    border-radius: 10px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--glass-border);
+    color: #fff;
+    font-size: 0.9rem;
+    font-family: var(--font-body);
+    transition: all 0.25s var(--ease-premium);
+}
+.admin-field textarea { resize: vertical; min-height: 80px; }
+.admin-field input:focus, .admin-field select:focus, .admin-field textarea:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(108,99,255,0.18);
+    background: rgba(255,255,255,0.06);
+}
+.admin-field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.admin-hint { font-size: 0.74rem; color: var(--text-light); margin-top: 6px; opacity: 0.8; }
+.admin-error { color: #ff8a8a; font-size: 0.8rem; margin-top: 10px; min-height: 18px; }
+
+.admin-color-swatches { display: flex; gap: 10px; flex-wrap: wrap; }
+.admin-swatch {
+    width: 34px; height: 34px; border-radius: 50%; cursor: pointer;
+    border: 2px solid transparent; transition: all 0.25s var(--ease-premium);
+    position: relative;
+}
+.admin-swatch:hover { transform: scale(1.12); }
+.admin-swatch.active {
+    border-color: #fff;
+    transform: scale(1.18);
+    box-shadow: 0 0 0 3px rgba(255,255,255,0.15), 0 0 16px currentColor;
+}
+.admin-swatch.active::after {
+    content: "\f00c";
+    font-family: "Font Awesome 6 Free"; font-weight: 900;
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    color: #fff; font-size: 0.7rem;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+}
+
+/* Login modal specifics */
+.admin-login-icon {
+    width: 64px; height: 64px; border-radius: 18px;
+    background: var(--gradient-1);
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 18px; font-size: 1.55rem; color: #fff;
+    box-shadow: 0 10px 30px rgba(108,99,255,0.4), 0 0 0 6px rgba(108,99,255,0.08);
+    animation: adminFloat 3.2s ease-in-out infinite;
+}
+@keyframes adminFloat {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-6px) rotate(-3deg); }
+}
+.admin-login-title { text-align: center; font-family: var(--font-display); font-size: 1.3rem; font-weight: 700; color: #fff; margin-bottom: 4px; }
+.admin-login-sub { text-align: center; font-size: 0.82rem; color: var(--text-light); margin-bottom: 24px; }
+
+/* Admin mode top bar */
+.admin-bar {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 9989;
+    background: rgba(13,13,15,0.92);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--glass-border);
+    padding: 10px 20px;
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 14px;
+    flex-wrap: wrap;
+    transform: translateY(-100%);
+    transition: transform 0.4s var(--ease-premium);
+}
+.admin-bar.show { transform: translateY(0); }
+body.admin-mode-on { padding-top: 52px; }
+.admin-bar-left { display: flex; align-items: center; gap: 10px; }
+.admin-bar-badge {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 0.78rem; font-weight: 700; color: #fff;
+    padding: 6px 12px; border-radius: 999px;
+    background: var(--gradient-1);
+    position: relative;
+}
+.admin-bar-badge::after {
+    content: "";
+    width: 7px; height: 7px; border-radius: 50%;
+    background: var(--cyan-glow);
+    box-shadow: 0 0 0 0 rgba(94,234,212,0.6);
+    animation: adminPulseDot 1.8s ease-out infinite;
+    margin-left: 2px;
+}
+@keyframes adminPulseDot {
+    0% { box-shadow: 0 0 0 0 rgba(94,234,212,0.55); }
+    70% { box-shadow: 0 0 0 8px rgba(94,234,212,0); }
+    100% { box-shadow: 0 0 0 0 rgba(94,234,212,0); }
+}
+.admin-bar-badge i { font-size: 0.7rem; }
+.admin-bar-actions { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+
+/* Floating section toolbar (positioned via JS, fixed) */
+.admin-section-toolbar {
+    position: fixed;
+    z-index: 9500;
+    display: flex;
+    gap: 4px;
+    padding: 6px;
+    border-radius: 12px;
+    background: rgba(15,15,18,0.92);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid var(--primary-color);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.45), 0 0 22px rgba(108,99,255,0.25);
+    opacity: 0;
+    transform: translateY(-4px);
+    pointer-events: none;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+.admin-section-toolbar.show { opacity: 1; transform: translateY(0); pointer-events: auto; }
+.admin-section-toolbar button {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    border: none;
+    background: transparent;
+    color: var(--text-light);
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.78rem;
+    position: relative;
+    transition: all 0.2s ease;
+}
+.admin-section-toolbar button:hover { background: var(--primary-color); color: #fff; transform: translateY(-2px); }
+.admin-section-toolbar button.danger:hover { background: var(--accent-color); }
+.admin-section-toolbar button::after {
+    content: attr(title);
+    position: absolute;
+    bottom: -28px; left: 50%; transform: translateX(-50%);
+    font-size: 0.62rem; font-weight: 600; letter-spacing: 0.03em;
+    background: rgba(10,10,12,0.95);
+    color: #fff;
+    padding: 3px 7px;
+    border-radius: 6px;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.15s ease;
+}
+.admin-section-toolbar button:hover::after { opacity: 1; }
+.admin-highlight-outline {
+    outline: 2px dashed rgba(108, 99, 255, 0.55);
+    outline-offset: 3px;
+    border-radius: 6px;
+}
+
+/* Admin-hidden (soft-hidden) sections shown faded in admin mode */
+body.admin-mode-on section[data-admin-section].admin-section-hidden {
+    display: block !important;
+    opacity: 0.35;
+    filter: grayscale(0.6);
+    position: relative;
+}
+section[data-admin-section].admin-section-hidden::before {
+    content: "HIDDEN FROM VISITORS";
+    position: absolute; top: 10px; left: 50%; transform: translateX(-50%);
+    background: var(--accent-color); color: #fff; font-size: 0.68rem; font-weight: 700;
+    letter-spacing: 0.06em; padding: 4px 12px; border-radius: 999px; z-index: 40;
+}
+body:not(.admin-mode-on) section[data-admin-section].admin-section-hidden { display: none !important; }
+
+/* Editable content mode */
+[data-admin-editing="true"] {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 6px;
+    border-radius: 8px;
+    background: rgba(108,99,255,0.04);
+}
+.admin-edit-toolbar {
+    position: sticky; top: 0; z-index: 30;
+    display: flex; justify-content: flex-end; gap: 8px;
+    padding: 10px; margin-bottom: 10px;
+    background: rgba(15,15,18,0.9);
+    border: 1px solid var(--glass-border);
+    border-radius: 12px;
+}
+
+/* Template gallery */
+.admin-template-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 14px;
+}
+.admin-template-card {
+    border: 1px solid var(--glass-border);
+    border-radius: 14px;
+    padding: 20px 14px;
+    text-align: center;
+    cursor: pointer;
+    background: rgba(255,255,255,0.03);
+    transition: all 0.3s var(--ease-premium);
+    position: relative;
+    overflow: hidden;
+}
+.admin-template-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 50% 0%, var(--tpl-accent, var(--primary-color)) 0%, transparent 65%);
+    opacity: 0;
+    transition: opacity 0.3s var(--ease-premium);
+}
+.admin-template-card:hover {
+    border-color: var(--tpl-accent, var(--primary-color));
+    background: rgba(108,99,255,0.06);
+    transform: translateY(-5px);
+    box-shadow: 0 14px 28px rgba(0,0,0,0.3);
+}
+.admin-template-card:hover::before { opacity: 0.16; }
+.admin-template-card i {
+    font-size: 1.5rem;
+    color: var(--tpl-accent, var(--primary-color));
+    margin-bottom: 12px;
+    display: flex; align-items: center; justify-content: center;
+    width: 52px; height: 52px;
+    margin-left: auto; margin-right: auto;
+    border-radius: 14px;
+    background: color-mix(in srgb, var(--tpl-accent, var(--primary-color)) 16%, transparent);
+    position: relative; z-index: 1;
+    transition: transform 0.35s var(--ease-premium);
+}
+.admin-template-card:hover i { transform: scale(1.12) rotate(-6deg); }
+.admin-template-card span { font-size: 0.82rem; font-weight: 600; color: var(--text-color); position: relative; z-index: 1; }
+
+/* Card list editor (projects/skills/etc items) */
+.admin-item-list { display: flex; flex-direction: column; gap: 10px; }
+.admin-item-row {
+    display: flex; align-items: center; gap: 10px;
+    padding: 12px;
+    border: 1px solid var(--glass-border);
+    border-radius: 12px;
+    background: rgba(255,255,255,0.03);
+    cursor: grab;
+}
+.admin-item-row.dragging { opacity: 0.4; }
+.admin-item-row.drag-over { border-color: var(--primary-color); }
+.admin-item-row .handle { color: var(--text-light); cursor: grab; }
+.admin-item-row .admin-item-fields { flex: 1; display: flex; flex-direction: column; gap: 6px; }
+.admin-item-row input, .admin-item-row textarea {
+    width: 100%; padding: 8px 10px; font-size: 0.82rem;
+    border-radius: 8px; border: 1px solid var(--glass-border);
+    background: rgba(255,255,255,0.04); color: #fff;
+}
+
+/* Manage sections list */
+.admin-section-list { display: flex; flex-direction: column; gap: 8px; }
+.admin-section-item {
+    display: flex; align-items: center; gap: 12px;
+    padding: 12px 14px;
+    border: 1px solid var(--glass-border);
+    border-radius: 12px;
+    background: rgba(255,255,255,0.03);
+    cursor: grab;
+}
+.admin-section-item.dragging { opacity: 0.4; }
+.admin-section-item.drag-over { border-color: var(--primary-color); border-style: dashed; }
+.admin-section-item .name { flex: 1; font-weight: 600; font-size: 0.9rem; }
+.admin-section-item .tag {
+    font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.05em;
+    padding: 2px 8px; border-radius: 999px; background: rgba(108,99,255,0.15); color: #b7b1ff;
+}
+.admin-section-item.hidden-row { opacity: 0.5; }
+.admin-section-item .row-actions { display: flex; gap: 6px; }
+.admin-section-item .row-actions button {
+    width: 28px; height: 28px; border-radius: 7px; border: none;
+    background: rgba(255,255,255,0.06); color: var(--text-light); cursor: pointer;
+}
+.admin-section-item .row-actions button:hover { background: var(--primary-color); color: #fff; }
+
+/* Toast */
+.admin-toast {
+    position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(20px);
+    background: rgba(20,20,24,0.95);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border);
+    color: #fff; padding: 13px 24px; border-radius: 999px;
+    font-size: 0.85rem; z-index: 10001;
+    display: flex; align-items: center; gap: 10px;
+    opacity: 0; transition: all 0.4s var(--ease-premium);
+    box-shadow: 0 14px 34px rgba(0,0,0,0.45), 0 0 0 1px rgba(108,99,255,0.12);
+}
+.admin-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+.admin-toast i { color: #5EEAD4; filter: drop-shadow(0 0 6px rgba(94,234,212,0.6)); }
+.admin-toast.error i { color: #ff8a8a; filter: drop-shadow(0 0 6px rgba(255,138,138,0.6)); }
+
+/* Card overflow ("Show All") */
+.admin-extra-hidden { display: none !important; }
+@keyframes adminCardReveal {
+    from { opacity: 0; transform: translateY(14px) scale(0.97); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}
+.admin-reveal { animation: adminCardReveal 0.5s var(--ease-premium) both; }
+.admin-showall-wrap { text-align: center; }
+.admin-showall-btn {
+    font-family: var(--font-display);
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #fff;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid var(--glass-border);
+    padding: 12px 26px;
+    border-radius: 999px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    transition: all 0.35s var(--ease-premium);
+}
+.admin-showall-btn:hover {
+    background: var(--gradient-1);
+    border-color: transparent;
+    transform: translateY(-3px);
+    box-shadow: 0 12px 28px rgba(108,99,255,0.35);
+}
+.admin-showall-btn .count { color: var(--text-light); font-weight: 400; }
+.admin-showall-btn:hover .count { color: rgba(255,255,255,0.85); }
+.admin-showall-btn i { transition: transform 0.35s var(--ease-premium); font-size: 0.75rem; }
+
+/* Generated template cards — creative refresh */
+.admin-gen-card {
+    position: relative;
+    background: linear-gradient(180deg, rgba(255,255,255,0.045), rgba(255,255,255,0.015));
+    border: 1px solid var(--glass-border);
+    border-radius: 18px;
+    padding: 28px 24px 26px;
+    overflow: hidden;
+    transition: transform 0.4s var(--ease-premium), border-color 0.4s var(--ease-premium), box-shadow 0.4s var(--ease-premium);
+    isolation: isolate;
+}
+.admin-gen-card::before {
+    content: "";
+    position: absolute;
+    top: -40%; right: -30%;
+    width: 140px; height: 140px;
+    border-radius: 50%;
+    background: var(--card-accent, var(--primary-color));
+    opacity: 0.14;
+    filter: blur(30px);
+    z-index: -1;
+    transition: opacity 0.4s var(--ease-premium), transform 0.4s var(--ease-premium);
+}
+.admin-gen-card::after {
+    content: "";
+    position: absolute;
+    left: 0; top: 0; right: 0; height: 3px;
+    background: var(--card-accent, var(--primary-color));
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.45s var(--ease-premium);
+}
+.admin-gen-card:hover {
+    transform: translateY(-8px);
+    border-color: var(--card-accent, var(--primary-color));
+    box-shadow: 0 18px 40px rgba(0,0,0,0.35);
+}
+.admin-gen-card:hover::before { opacity: 0.24; transform: scale(1.15); }
+.admin-gen-card:hover::after { transform: scaleX(1); }
+.admin-gen-card .gen-badge {
+    position: absolute; top: 18px; right: 20px;
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    color: var(--text-light);
+    opacity: 0.5;
+    letter-spacing: 0.05em;
+}
+.admin-gen-card .gen-icon {
+    width: 52px; height: 52px;
+    border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    background: var(--card-accent, var(--primary-color));
+    background: color-mix(in srgb, var(--card-accent, var(--primary-color)) 18%, transparent);
+    color: var(--card-accent, var(--primary-color));
+    font-size: 1.3rem;
+    margin-bottom: 18px;
+    transition: transform 0.4s var(--ease-premium);
+}
+.admin-gen-card:hover .gen-icon { transform: scale(1.1) rotate(-6deg); }
+.admin-gen-card h3 {
+    color: #fff;
+    font-family: var(--font-display);
+    font-size: 1.08rem;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+.admin-gen-card p {
+    color: var(--text-light);
+    font-size: 0.9rem;
+    line-height: 1.65;
+}
+
+@media (max-width: 640px) {
+    .admin-field-row { grid-template-columns: 1fr; }
+    .admin-bar { padding: 8px 12px; }
+    .admin-bar-actions .admin-btn span.lbl { display: none; }
+    .admin-trigger-btn span { display: none; }
+    .admin-trigger-btn { padding: 12px; }
+}
+
 
     * {
         margin: 0;
         padding: 0;
         box-sizing: border-box;
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-family: var(--font-body);
+    }
+
+    ::selection {
+        background: var(--primary-color);
+        color: #fff;
+    }
+
+    /* Custom scrollbar */
+    ::-webkit-scrollbar { width: 10px; }
+    ::-webkit-scrollbar-track { background: var(--darker-bg); }
+    ::-webkit-scrollbar-thumb {
+        background: linear-gradient(var(--primary-color), var(--secondary-color));
+        border-radius: 10px;
+    }
+    ::-webkit-scrollbar-thumb:hover { background: var(--accent-color); }
+
+    h1, h2, h3, h4, .logo, .section-title, .timeline-title, .project-info h3 {
+        font-family: var(--font-display);
+        letter-spacing: -0.02em;
+    }
+
+    :focus-visible {
+        outline: 2px solid var(--cyan-glow);
+        outline-offset: 3px;
+        border-radius: 4px;
+    }
+
+    a.skip-link {
+        position: absolute;
+        left: -9999px;
+        top: 0;
+        background: var(--primary-color);
+        color: #fff;
+        padding: 10px 20px;
+        z-index: 10000;
+        border-radius: 0 0 8px 0;
+    }
+    a.skip-link:focus {
+        left: 0;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        *, *::before, *::after {
+            animation-duration: 0.01ms !important;
+            animation-iteration-count: 1 !important;
+            transition-duration: 0.01ms !important;
+            scroll-behavior: auto !important;
+        }
     }
 
     /* Dark Mode Toggle Button */
@@ -61,10 +750,29 @@
 
     body {
         background-color: var(--dark-bg);
+        background-image: var(--gradient-mesh);
+        background-attachment: fixed;
         color: var(--text-color);
         line-height: 1.6;
         transition: all 0.3s ease;
     }
+
+    body.light-mode {
+        background-image: none;
+    }
+
+    /* Cursor spotlight (JS-driven, purely decorative, ignores pointer events) */
+    #cursor-spotlight {
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        z-index: 2;
+        opacity: 0;
+        transition: opacity 0.4s ease;
+        background: radial-gradient(500px circle at var(--spot-x, 50%) var(--spot-y, 50%), rgba(108, 99, 255, 0.10), transparent 70%);
+    }
+    body.spotlight-active #cursor-spotlight { opacity: 1; }
+    body.light-mode #cursor-spotlight { display: none; }
 
     a {
         text-decoration: none;
@@ -108,44 +816,49 @@
 
    .btn {
     display: inline-block;
-    padding: 12px 24px;
+    padding: 13px 28px;
     background: var(--gradient-1);
     color: white;
     border-radius: 30px;
     font-weight: 500;
-    transition: all 0.3s ease;
+    font-family: var(--font-display);
+    letter-spacing: 0.01em;
+    transition: transform 0.35s var(--ease-premium), box-shadow 0.35s var(--ease-premium);
     border: none;
     cursor: pointer;
     position: relative;
     overflow: hidden;
     z-index: 1;
+    box-shadow: 0 4px 18px rgba(108, 99, 255, 0.25);
 }
 
-/* ---------------------------------- */
-/* هذا هو الجزء الذي تم إضافته      */
-/* ---------------------------------- */
 .btn:hover {
-    background: black; /* تغيير لون الخلفية إلى الأسود عند الوقوف على الزر */
-    color: white;      /* إبقاء لون الكتابة أبيض */
+    transform: translateY(-3px);
+    box-shadow: 0 12px 30px rgba(108, 99, 255, 0.45);
+    color: white;
 }
 
+.btn:active {
+    transform: translateY(-1px);
+}
 
+/* Shimmer sweep across the button */
 .btn::before {
     content: '';
     position: absolute;
     top: 0;
-    left: 0;
-    width: 100%;
+    left: -75%;
+    width: 50%;
     height: 100%;
-    background: var(--gradient-2);
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    z-index: -1;
+    background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.35), transparent);
+    transform: skewX(-20deg);
+    transition: left 0.7s var(--ease-premium);
+    z-index: 2;
+    pointer-events: none;
 }
 
-/* هذا الجزء يضمن عدم ظهور التأثير القديم فوق اللون الأسود الجديد */
 .btn:hover::before {
-    opacity: 0;
+    left: 125%;
 }
 
     /* Header & Navigation */
@@ -163,6 +876,7 @@
     header.scrolled {
         padding: 10px 0;
         box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+        border-bottom: 1px solid rgba(108, 99, 255, 0.15);
     }
 
     nav {
@@ -223,7 +937,11 @@
         min-height: 100vh;
         display: flex;
         align-items: center;
-        background: linear-gradient(135deg, var(--darker-bg) 0%, var(--dark-bg) 100%);
+        background:
+            linear-gradient(rgba(108, 99, 255, 0.06) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(108, 99, 255, 0.06) 1px, transparent 1px),
+            linear-gradient(135deg, var(--darker-bg) 0%, var(--dark-bg) 100%);
+        background-size: 48px 48px, 48px 48px, 100% 100%;
         position: relative;
         overflow: hidden;
     }
@@ -237,6 +955,24 @@
         height: 100%;
         background: radial-gradient(circle, rgba(108, 99, 255, 0.1) 0%, transparent 70%);
         z-index: 0;
+        animation: driftOrb 18s ease-in-out infinite alternate;
+    }
+
+    #home::after {
+        content: '';
+        position: absolute;
+        bottom: -40%;
+        left: -30%;
+        width: 80%;
+        height: 80%;
+        background: radial-gradient(circle, rgba(94, 234, 212, 0.08) 0%, transparent 70%);
+        z-index: 0;
+        animation: driftOrb 22s ease-in-out infinite alternate-reverse;
+    }
+
+    @keyframes driftOrb {
+        from { transform: translate(0, 0) scale(1); }
+        to { transform: translate(-40px, 30px) scale(1.15); }
     }
 
     .hero-content {
@@ -263,10 +999,18 @@
     }
 
     .hero-text h1 span {
-        background: var(--gradient-1);
+        background: linear-gradient(90deg, var(--primary-color), var(--cyan-glow), var(--accent-color), var(--primary-color));
+        background-size: 300% auto;
         -webkit-background-clip: text;
         background-clip: text;
         -webkit-text-fill-color: transparent;
+        animation: gradientShift 6s ease infinite;
+    }
+
+    @keyframes gradientShift {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
     }
 
     .hero-text p {
@@ -291,29 +1035,107 @@
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        width: 350px;
-        height: 350px;
+        width: 380px;
+        height: 380px;
         background: var(--gradient-1);
-        border-radius: 50%;
-        filter: blur(60px);
+        border-radius: 42% 58% 65% 35% / 45% 40% 60% 55%;
+        filter: blur(70px);
         opacity: 0.3;
+        z-index: -2;
+        animation: pulseGlow 4s ease-in-out infinite;
+    }
+
+    /* Rotating dashed ring orbiting the portrait */
+    .hero-image::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 500px;
+        height: 500px;
+        transform: translate(-50%, -50%);
+        border-radius: 45% 55% 60% 40% / 50% 45% 55% 50%;
+        border: 1.5px dashed rgba(108, 99, 255, 0.4);
         z-index: -1;
+        animation: spinSlow 24s linear infinite, morphShape 14s ease-in-out infinite reverse;
+    }
+
+    @keyframes spinSlow {
+        from { transform: translate(-50%, -50%) rotate(0deg); }
+        to { transform: translate(-50%, -50%) rotate(360deg); }
+    }
+
+    @keyframes pulseGlow {
+        0%, 100% { opacity: 0.25; transform: translate(-50%, -50%) scale(1); }
+        50% { opacity: 0.4; transform: translate(-50%, -50%) scale(1.08); }
+    }
+
+    @keyframes morphShape {
+        0%, 100% { border-radius: 42% 58% 65% 35% / 45% 40% 60% 55%; }
+        33%      { border-radius: 58% 42% 35% 65% / 55% 65% 35% 45%; }
+        66%      { border-radius: 35% 65% 58% 42% / 40% 55% 45% 60%; }
     }
 
     .hero-image img {
-        width: 460px;
-        height: 460px;
-        border-radius: 50%;
+        animation: floatImg 6s ease-in-out infinite, morphShape 14s ease-in-out infinite;
+    }
+
+    @keyframes floatImg {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-12px); }
+    }
+
+    .hero-image img {
+        width: 420px;
+        height: 420px;
+        border-radius: 42% 58% 65% 35% / 45% 40% 60% 55%;
         border: 5px solid transparent;
         background: linear-gradient(var(--card-bg), var(--card-bg)) padding-box,
-                    var(--gradient-1) border-box;
-        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
-        transition: all 0.5s ease;
+                    conic-gradient(from 0deg, var(--primary-color), var(--cyan-glow), var(--accent-color), var(--primary-color)) border-box;
+        box-shadow: 0 25px 60px rgba(0, 0, 0, 0.35);
+        transition: transform 0.5s ease, border-radius 0.6s ease;
         object-fit: cover;
     }
 
     .hero-image img:hover {
         transform: scale(1.05);
+        border-radius: 50% 50% 45% 55% / 55% 45% 55% 45%;
+    }
+
+    /* Floating tech badge chips around the portrait */
+    .hero-badge {
+        position: absolute;
+        width: 54px;
+        height: 54px;
+        border-radius: 16px;
+        background: var(--glass-bg);
+        border: 1px solid var(--glass-border);
+        backdrop-filter: blur(10px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.35rem;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+        z-index: 2;
+        animation: badgeFloat 5s ease-in-out infinite;
+    }
+
+    .hero-badge.badge-1 { top: 6%; right: 10%; color: var(--cyan-glow); animation-delay: 0s; }
+    .hero-badge.badge-2 { bottom: 10%; left: 0%; color: var(--accent-color); animation-delay: 1.2s; }
+    .hero-badge.badge-3 { top: 46%; right: -4%; color: var(--primary-color); animation-delay: 2.4s; }
+
+    @keyframes badgeFloat {
+        0%, 100% { transform: translateY(0) rotate(0deg); }
+        50% { transform: translateY(-14px) rotate(6deg); }
+    }
+
+    @media (max-width: 768px) {
+        .hero-image::after { display: none; }
+        .hero-badge { width: 42px; height: 42px; font-size: 1.1rem; }
+    }
+
+    @media (max-width: 500px) {
+        .hero-badge { display: none; }
     }
 
     /* About Section */
@@ -974,21 +1796,25 @@
         }
     }
 
+    /* Scroll reveal: hidden until the IntersectionObserver adds .animate */
     .fade-in {
-        animation: fadeIn 1s ease forwards;
+        opacity: 0;
+        transform: translateY(28px);
+        transition: opacity 0.8s var(--ease-premium), transform 0.8s var(--ease-premium);
+        will-change: opacity, transform;
     }
 
-    .delay-1 {
-        animation-delay: 0.2s;
+    .fade-in.animate {
+        opacity: 1;
+        transform: translateY(0);
     }
 
-    .delay-2 {
-        animation-delay: 0.4s;
-    }
-
-    .delay-3 {
-        animation-delay: 0.6s;
-    }
+    .delay-1.animate { transition-delay: 0.1s; }
+    .delay-2.animate { transition-delay: 0.2s; }
+    .delay-3.animate { transition-delay: 0.3s; }
+    .delay-4.animate { transition-delay: 0.4s; }
+    .delay-5.animate { transition-delay: 0.5s; }
+    .delay-6.animate { transition-delay: 0.6s; }
 
     /* Light Mode */
     body.light-mode {
@@ -1031,8 +1857,15 @@
 
 </head>
 <body>
-<!-- Theme Toggle -->
+<!-- Admin Mode mount point (built entirely by JS below; empty for normal visitors until they click Admin) -->
+<div id="admin-root"></div>
+<div id="cursor-spotlight" aria-hidden="true"></div>
+<a href="#home" class="skip-link">Skip to content</a>
 
+<!-- Theme Toggle -->
+<button id="themeToggle" class="theme-toggle" aria-label="Toggle light and dark theme" type="button">
+    <i class="fas fa-sun"></i>
+</button>
 
 <!-- Header & Navigation -->
 <header id="header">
@@ -1045,7 +1878,7 @@
                 <li><a href="#projects">Projects</a></li>
                 <li><a href="#contact">Contact</a></li>
             </ul>
-            <div class="hamburger">
+            <div class="hamburger" role="button" tabindex="0" aria-label="Toggle navigation menu" aria-expanded="false">
                 <i class="fas fa-bars"></i>
             </div>
         </nav>
@@ -1069,8 +1902,11 @@
                <picture>
   <source media="(max-width: 300px)" srcset="user photo/WhatsApp Image 2025-07-22 at 14.45.13_1ec646e8.jpg">
   <source media="(max-width: 600px)" srcset="user photo/WhatsApp Image 2025-07-22 at 14.45.13_1ec646e8.jpg">
-  <img src="user photo/WhatsApp Image 2025-07-22 at 14.45.13_1ec646e8.jpg" alt="Profile Picture" style="width:auto;">
+  <img src="user photo/WhatsApp Image 2025-07-22 at 14.45.13_1ec646e8.jpg" alt="Profile Picture">
 </picture>
+                <div class="hero-badge badge-1" aria-hidden="true"><i class="fab fa-python"></i></div>
+                <div class="hero-badge badge-2" aria-hidden="true"><i class="fas fa-brain"></i></div>
+                <div class="hero-badge badge-3" aria-hidden="true"><i class="fas fa-code"></i></div>
             </div>
         </div>
     </div>
@@ -1111,11 +1947,6 @@
 <section id="education" class="bg-gray-900 py-16">
     <div class="container mx-auto px-6">
         <h2 class="section-title fade-in">Education</h2>
-        <h2 class="text-3xl font-bold text-center mb-12 text-white relative flex items-center justify-center">
-            <span class="mr-3"></span> <!-- Emoji on the left -->
-            EDUCATION
-            <span class="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-20 h-1 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full"></span>
-        </h2>
 
         <div class="bg-gray-800 rounded-xl p-8 shadow-lg border border-gray-700 hover:shadow-xl transition-all duration-300 max-w-4xl mx-auto">
             <div class="flex items-start mb-6">
@@ -1161,10 +1992,6 @@
 <section id="skills" class="py-16 bg-gray-900">
     <div class="container mx-auto px-6">
         <h2 class="section-title fade-in">Skills</h2>
-        <h2 class="text-3xl font-bold text-center mb-12 text-white relative">
-            SKILLS
-            <span class="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-20 h-1 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full"></span>
-        </h2>
 
         <div class="skills-container max-w-4xl mx-auto">
             <!-- Web Development Skills (Always open by default) -->
@@ -1364,19 +2191,20 @@
   }
 
   .timeline-card {
-    background: var(--card-bg);
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0)), var(--card-bg);
+    backdrop-filter: blur(8px);
+    border: 1px solid var(--glass-border);
     border-radius: 0.75rem;
     padding: 1.25rem;
     margin-left: 1.5rem;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-    transition: all 0.3s ease;
+    transition: transform 0.4s var(--ease-premium), box-shadow 0.4s var(--ease-premium), border-color 0.4s var(--ease-premium);
   }
 
   .timeline-item:hover .timeline-card {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
-    border-color: rgba(108, 99, 255, 0.3);
+    transform: translateY(-5px);
+    box-shadow: 0 12px 30px rgba(108, 99, 255, 0.18);
+    border-color: rgba(108, 99, 255, 0.35);
   }
 
   .timeline-icon {
@@ -1599,7 +2427,7 @@
                     <p>Desktop application built with Java featuring a GUI designed with Spring Framework for efficient
                         task organization.</p>
                     <div class="project-links">
-                        <a href=https://github.com/omaryasser3060/Task-Management-System.git" class="btn" target="_blank">View
+                        <a href="https://github.com/omaryasser3060/Task-Management-System.git" class="btn" target="_blank">View
                             Code</a>
                     </div>
                 </div>
@@ -2104,8 +2932,8 @@
         <div class="footer-content">
             <p>&copy; <span id="year"></span> Omar Yasser. All rights reserved.</p>
             <div class="social-links">
-                <a href="https://github.com/omaryasser3060" target="_blank"><i class="fab fa-github"></i></a>
-                <a href="https://www.linkedin.com/in/omar-yasser-software-engineer" target="_blank"><i
+                <a href="https://github.com/omaryasser3060" target="_blank" aria-label="Omar Yasser on GitHub"><i class="fab fa-github"></i></a>
+                <a href="https://www.linkedin.com/in/omar-yasser-software-engineer" target="_blank" aria-label="Omar Yasser on LinkedIn"><i
                         class="fab fa-linkedin"></i></a>
             </div>
         </div>
@@ -2113,7 +2941,7 @@
 </footer>
 
 <!-- Back to Top Button -->
-<a href="#home" class="back-to-top">
+<a href="#home" class="back-to-top" aria-label="Back to top">
     <i class="fas fa-arrow-up"></i>
 </a>
 
@@ -2203,37 +3031,6 @@
     });
 
 
-    // Dark Mode Toggle Functionality
-    const darkModeToggle = document.getElementById('darkModeToggle');
-    const body = document.body;
-
-    // Check for saved theme preference or use preferred color scheme
-    const savedTheme = localStorage.getItem('theme');
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-
-    // Apply saved theme or user's preferred color scheme
-    if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
-        body.classList.add('dark-mode');
-        darkModeToggle.innerHTML = '<i class="fas fa-sun"></i>';
-    } else {
-        darkModeToggle.innerHTML = '<i class="fas fa-moon"></i>';
-    }
-
-    // Toggle dark mode on button click
-    darkModeToggle.addEventListener('click', () => {
-        body.classList.toggle('dark-mode');
-        const isDark = body.classList.contains('dark-mode');
-
-        if (isDark) {
-            darkModeToggle.innerHTML = '<i class="fas fa-sun"></i>';
-            localStorage.setItem('theme', 'dark');
-        } else {
-            darkModeToggle.innerHTML = '<i class="fas fa-moon"></i>';
-            localStorage.setItem('theme', 'light');
-        }
-    });
-
-
     // Theme Toggle
     const themeToggle = document.getElementById('themeToggle');
     const body = document.body;
@@ -2270,7 +3067,944 @@
             category.classList.toggle('collapsed');
         });
     });
+
+    // Mouse spotlight effect (desktop only, respects reduced motion)
+    const spotlight = document.getElementById('cursor-spotlight');
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (spotlight && !prefersReducedMotion && window.matchMedia('(hover: hover)').matches) {
+        window.addEventListener('mousemove', (e) => {
+            document.body.classList.add('spotlight-active');
+            spotlight.style.setProperty('--spot-x', e.clientX + 'px');
+            spotlight.style.setProperty('--spot-y', e.clientY + 'px');
+        }, { passive: true });
+        window.addEventListener('mouseleave', () => {
+            document.body.classList.remove('spotlight-active');
+        });
+    }
+
+    // Subtle 3D tilt on project cards (desktop only)
+    if (!prefersReducedMotion && window.matchMedia('(hover: hover)').matches) {
+        document.querySelectorAll('.project-card').forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                const rotateX = ((y / rect.height) - 0.5) * -6;
+                const rotateY = ((x / rect.width) - 0.5) * 6;
+                card.style.transform = `perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-10px)`;
+            });
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = '';
+            });
+        });
+    }
+</script>
+
+<script>
+/* ==========================================================================
+   ADMIN MODE — logic (appended script, does not modify any code above it)
+   Everything in this file is defensive: if anything fails, the public site
+   keeps working exactly as before. Nothing here runs unless the Admin
+   button is clicked.
+   ========================================================================== */
+(function () {
+    "use strict";
+
+    /* ---------------------------------------------------------------------
+       0. CREDENTIALS (client-side gate only — see note shipped to the owner)
+       ------------------------------------------------------------------- */
+    var ADMIN_USERNAME = "omar_admin_8354";
+    var ADMIN_HASH = "43a7e117ca8ac20df5879a9bb1d953b2a12e574557adbb998628ccf7d26434de"; // sha256(username:password)
+
+    async function sha256(text) {
+        var enc = new TextEncoder().encode(text);
+        var buf = await crypto.subtle.digest("SHA-256", enc);
+        return Array.from(new Uint8Array(buf)).map(function (b) { return b.toString(16).padStart(2, "0"); }).join("");
+    }
+
+    var SESSION_KEY = "pf_admin_authed";
+    var STORE_KEY = "pf_admin_store_v1";
+
+    /* ---------------------------------------------------------------------
+       1. STORAGE
+       ------------------------------------------------------------------- */
+    function loadStore() {
+        try {
+            var raw = localStorage.getItem(STORE_KEY);
+            if (!raw) return defaultStore();
+            var parsed = JSON.parse(raw);
+            return Object.assign(defaultStore(), parsed);
+        } catch (e) { return defaultStore(); }
+    }
+    function defaultStore() {
+        return {
+            sectionOrder: [],
+            hiddenSections: [],
+            deletedSections: [],
+            customSections: {},
+            contentEdits: {}
+        };
+    }
+    function saveStore() {
+        localStorage.setItem(STORE_KEY, JSON.stringify(STORE));
+    }
+    var STORE = loadStore();
+
+    /* ---------------------------------------------------------------------
+       2. TOAST
+       ------------------------------------------------------------------- */
+    function toast(msg, isError) {
+        var el = document.getElementById("admin-toast");
+        el.innerHTML = '<i class="fas ' + (isError ? "fa-circle-exclamation" : "fa-circle-check") + '"></i><span>' + msg + "</span>";
+        el.className = "admin-toast show" + (isError ? " error" : "");
+        clearTimeout(toast._t);
+        toast._t = setTimeout(function () { el.classList.remove("show"); }, 2800);
+    }
+
+    /* ---------------------------------------------------------------------
+       3. SECTION DISCOVERY
+       ------------------------------------------------------------------- */
+    var MANAGED_IDS = ["home", "about", "education", "skills", "experience", "services", "projects", "achievements", "activities", "certifications", "contact", "thank-you"];
+    var FRIENDLY_NAMES = {
+        home: "Hero", about: "About", education: "Education", skills: "Skills",
+        experience: "Experience", services: "Services", projects: "Projects",
+        achievements: "Achievements", activities: "Activities", certifications: "Certifications",
+        contact: "Contact", "thank-you": "Thank You"
+    };
+
+    function tagOriginalSections() {
+        MANAGED_IDS.forEach(function (id) {
+            var el = document.getElementById(id);
+            if (el && el.tagName === "SECTION") {
+                el.setAttribute("data-admin-section", id);
+                el.setAttribute("data-admin-kind", "original");
+            }
+        });
+        if (STORE.sectionOrder.length === 0) {
+            STORE.sectionOrder = MANAGED_IDS.filter(function (id) { return document.getElementById(id); });
+        } else {
+            // merge in any managed ids not yet present (e.g. after an update to this file)
+            MANAGED_IDS.forEach(function (id) {
+                if (document.getElementById(id) && STORE.sectionOrder.indexOf(id) === -1 && STORE.deletedSections.indexOf(id) === -1) {
+                    STORE.sectionOrder.push(id);
+                }
+            });
+        }
+    }
+
+    function sectionName(id) {
+        if (FRIENDLY_NAMES[id]) return FRIENDLY_NAMES[id];
+        if (STORE.customSections[id]) return STORE.customSections[id].title || "Custom Section";
+        return id;
+    }
+
+    /* ---------------------------------------------------------------------
+       4. APPLY STORE -> DOM  (order, hidden, deleted, custom, edits)
+       ------------------------------------------------------------------- */
+    function getAnchor() {
+        // insertion reference: the footer, or end of body
+        return document.querySelector("footer") || null;
+    }
+
+    function ensureCustomSectionInDom(id) {
+        if (document.getElementById(id)) return;
+        var cfg = STORE.customSections[id];
+        if (!cfg) return;
+        var html = renderTemplate(cfg);
+        var wrap = document.createElement("div");
+        wrap.innerHTML = html;
+        var sectionEl = wrap.firstElementChild;
+        sectionEl.id = id;
+        sectionEl.setAttribute("data-admin-section", id);
+        sectionEl.setAttribute("data-admin-kind", "custom");
+        var anchor = getAnchor();
+        if (anchor) anchor.parentNode.insertBefore(sectionEl, anchor);
+        else document.body.appendChild(sectionEl);
+        // run fade-in observer on new nodes
+        observeFadeIns(sectionEl);
+    }
+
+    function applyStore() {
+        tagOriginalSections();
+
+        // 1. make sure custom sections exist in DOM
+        Object.keys(STORE.customSections).forEach(ensureCustomSectionInDom);
+
+        // 2. remove deleted sections from DOM (kept safely in STORE for restore)
+        STORE.deletedSections.forEach(function (id) {
+            var el = document.getElementById(id);
+            if (el) el.remove();
+        });
+
+        // 3. apply content edits to original sections
+        Object.keys(STORE.contentEdits).forEach(function (id) {
+            var el = document.getElementById(id);
+            if (!el) return;
+            var root = el.querySelector(":scope > .container") || el.firstElementChild;
+            if (root) root.innerHTML = STORE.contentEdits[id];
+        });
+
+        // 4. hide/show
+        STORE.sectionOrder.forEach(function (id) {
+            var el = document.getElementById(id);
+            if (!el) return;
+            var hidden = STORE.hiddenSections.indexOf(id) !== -1;
+            el.classList.toggle("admin-section-hidden", hidden);
+        });
+
+        // 5. reorder
+        var anchor = getAnchor();
+        STORE.sectionOrder.forEach(function (id) {
+            if (STORE.deletedSections.indexOf(id) !== -1) return;
+            var el = document.getElementById(id);
+            if (!el) return;
+            if (anchor) anchor.parentNode.insertBefore(el, anchor);
+            else document.body.appendChild(el);
+        });
+
+        applyCardOverflowAll();
+        saveStore();
+    }
+
+    function observeFadeIns(root) {
+        try {
+            var els = root.querySelectorAll(".fade-in");
+            var io = new IntersectionObserver(function (entries) {
+                entries.forEach(function (entry) {
+                    if (entry.isIntersecting) entry.target.classList.add("animate");
+                });
+            }, { threshold: 0.1, rootMargin: "0px 0px -50px 0px" });
+            els.forEach(function (el) { io.observe(el); });
+        } catch (e) { /* noop */ }
+    }
+
+    /* ---------------------------------------------------------------------
+       4b. "SHOW ALL" — auto-collapse long card lists, matching site style
+       ------------------------------------------------------------------- */
+    var CARD_OVERFLOW_LIMIT = 6;
+    var NO_OVERFLOW_IDS = ["skills"]; // this section already has its own show/hide toggle UX
+
+    function applyCardOverflow(sectionEl) {
+        if (!sectionEl) return;
+        var secId = sectionEl.getAttribute("data-admin-section") || sectionEl.id;
+        if (NO_OVERFLOW_IDS.indexOf(secId) !== -1) return;
+        var root = sectionEl.querySelector(":scope > .container") || sectionEl.firstElementChild;
+        if (!root) return;
+
+        var oldWrap = root.querySelector(":scope .admin-showall-wrap");
+        if (oldWrap) oldWrap.remove();
+
+        var list = findRepeatList(root);
+        if (!list) return;
+        var items = Array.prototype.filter.call(list.node.children, function (c) {
+            return c.tagName !== "STYLE" && c.tagName !== "SCRIPT" &&
+                !c.classList.contains("admin-item-del") && !c.classList.contains("admin-item-handle");
+        });
+        items.forEach(function (it) { it.classList.remove("admin-extra-hidden", "admin-reveal"); });
+        if (items.length <= CARD_OVERFLOW_LIMIT) return;
+
+        // skip lists of small inline chips/tags (e.g. short pill labels), only collapse real "cards"
+        var sample = items[0];
+        if (sample && sample.getBoundingClientRect().height < 55) return;
+
+        var extra = items.slice(CARD_OVERFLOW_LIMIT);
+        extra.forEach(function (it) { it.classList.add("admin-extra-hidden"); });
+
+        var wrap = document.createElement("div");
+        wrap.className = "admin-showall-wrap";
+        wrap.style.marginTop = "32px";
+        var btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "admin-showall-btn fade-in";
+        var collapsedLabel = '<span>Show All</span><i class="fas fa-chevron-down"></i><span class="count">(+' + extra.length + " more)</span>";
+        var expandedLabel = '<span>Show Less</span><i class="fas fa-chevron-up"></i>';
+        btn.innerHTML = collapsedLabel;
+        var expanded = false;
+        btn.addEventListener("click", function () {
+            expanded = !expanded;
+            extra.forEach(function (it, idx) {
+                if (expanded) {
+                    it.classList.remove("admin-extra-hidden");
+                    it.classList.add("admin-reveal");
+                    it.style.animationDelay = (idx * 0.05) + "s";
+                } else {
+                    it.classList.add("admin-extra-hidden");
+                    it.classList.remove("admin-reveal");
+                }
+            });
+            btn.innerHTML = expanded ? expandedLabel : collapsedLabel;
+            if (!expanded) wrap.scrollIntoView({ behavior: "smooth", block: "center" });
+        });
+        wrap.appendChild(btn);
+        list.node.parentNode.insertBefore(wrap, list.node.nextSibling);
+    }
+
+    function applyCardOverflowAll() {
+        document.querySelectorAll("section[data-admin-section]").forEach(applyCardOverflow);
+    }
+
+    /* ---------------------------------------------------------------------
+       5. UI ROOT (built once)
+       ------------------------------------------------------------------- */
+    var root = document.getElementById("admin-root");
+
+    function buildBaseUI() {
+        root.innerHTML =
+            '<button class="admin-trigger-btn" id="admin-trigger" type="button" aria-label="Admin login">' +
+            '<i class="fas fa-user-shield"></i><span>Admin</span></button>' +
+
+            '<div class="admin-bar" id="admin-bar">' +
+            '  <div class="admin-bar-left">' +
+            '    <span class="admin-bar-badge"><i class="fas fa-shield-halved"></i> Admin Mode</span>' +
+            '  </div>' +
+            '  <div class="admin-bar-actions">' +
+            '    <button class="admin-btn admin-btn-sm" id="admin-add-section"><i class="fas fa-plus"></i><span class="lbl">Add Section</span></button>' +
+            '    <button class="admin-btn admin-btn-sm" id="admin-manage-sections"><i class="fas fa-layer-group"></i><span class="lbl">Manage Sections</span></button>' +
+            '    <button class="admin-btn admin-btn-sm" id="admin-export"><i class="fas fa-download"></i><span class="lbl">Export</span></button>' +
+            '    <button class="admin-btn admin-btn-sm" id="admin-import"><i class="fas fa-upload"></i><span class="lbl">Import</span></button>' +
+            '    <button class="admin-btn admin-btn-sm admin-btn-danger" id="admin-exit"><i class="fas fa-right-from-bracket"></i><span class="lbl">Exit</span></button>' +
+            '  </div>' +
+            '</div>' +
+
+            '<div class="admin-section-toolbar" id="admin-sec-toolbar">' +
+            '  <button data-act="edit" title="Edit"><i class="fas fa-pen"></i></button>' +
+            '  <button data-act="up" title="Move up"><i class="fas fa-arrow-up"></i></button>' +
+            '  <button data-act="down" title="Move down"><i class="fas fa-arrow-down"></i></button>' +
+            '  <button data-act="dup" title="Duplicate"><i class="fas fa-clone"></i></button>' +
+            '  <button data-act="hide" title="Hide/Show"><i class="fas fa-eye"></i></button>' +
+            '  <button data-act="del" class="danger" title="Delete"><i class="fas fa-trash"></i></button>' +
+            '</div>' +
+
+            '<div class="admin-overlay admin-hidden" id="admin-overlay"><div id="admin-modal-slot"></div></div>' +
+            '<input type="file" id="admin-import-file" accept="application/json" style="display:none">' +
+            '<div class="admin-toast" id="admin-toast"></div>';
+    }
+
+    /* ---------------------------------------------------------------------
+       6. MODAL HELPERS
+       ------------------------------------------------------------------- */
+    var overlay, slot;
+    function openModal(html, size) {
+        overlay = document.getElementById("admin-overlay");
+        slot = document.getElementById("admin-modal-slot");
+        slot.innerHTML = '<div class="admin-modal admin-modal--' + (size || "md") + '">' + html + "</div>";
+        overlay.classList.remove("admin-hidden");
+        requestAnimationFrame(function () { overlay.classList.add("show"); });
+        overlay.onclick = function (e) { if (e.target === overlay) closeModal(); };
+        var closeBtn = slot.querySelector(".admin-modal-close");
+        if (closeBtn) closeBtn.onclick = closeModal;
+    }
+    function closeModal() {
+        if (!overlay) return;
+        overlay.classList.remove("show");
+        setTimeout(function () { overlay.classList.add("admin-hidden"); slot.innerHTML = ""; }, 250);
+    }
+
+    /* ---------------------------------------------------------------------
+       7. LOGIN
+       ------------------------------------------------------------------- */
+    function openLogin() {
+        openModal(
+            '<div class="admin-modal-body">' +
+            '  <div class="admin-login-icon"><i class="fas fa-lock"></i></div>' +
+            '  <div class="admin-login-title">Admin Sign In</div>' +
+            '  <div class="admin-login-sub">Enter your credentials to manage this portfolio</div>' +
+            '  <form id="admin-login-form">' +
+            '    <div class="admin-field"><label>Username</label><input type="text" id="admin-user" autocomplete="username" required></div>' +
+            '    <div class="admin-field"><label>Password</label><input type="password" id="admin-pass" autocomplete="current-password" required></div>' +
+            '    <div class="admin-error" id="admin-login-err"></div>' +
+            '    <button type="submit" class="admin-btn admin-btn-primary" style="width:100%;justify-content:center;">' +
+            '      <i class="fas fa-right-to-bracket"></i> Sign In</button>' +
+            '  </form>' +
+            '</div>' +
+            '<button class="admin-modal-close" style="position:absolute;top:16px;right:16px;"><i class="fas fa-xmark"></i></button>',
+            "sm"
+        );
+        var form = document.getElementById("admin-login-form");
+        form.addEventListener("submit", async function (e) {
+            e.preventDefault();
+            var u = document.getElementById("admin-user").value.trim();
+            var p = document.getElementById("admin-pass").value;
+            var hash = await sha256(u + ":" + p);
+            if (u === ADMIN_USERNAME && hash === ADMIN_HASH) {
+                sessionStorage.setItem(SESSION_KEY, "1");
+                closeModal();
+                enterAdminMode();
+                toast("Welcome back, admin.");
+            } else {
+                document.getElementById("admin-login-err").textContent = "Invalid username or password.";
+            }
+        });
+    }
+
+    /* ---------------------------------------------------------------------
+       8. ADMIN MODE ON/OFF
+       ------------------------------------------------------------------- */
+    function enterAdminMode() {
+        document.body.classList.add("admin-mode-on");
+        document.getElementById("admin-bar").classList.add("show");
+        document.getElementById("admin-trigger").classList.add("admin-hidden");
+        bindSectionHover();
+    }
+    function exitAdminMode() {
+        sessionStorage.removeItem(SESSION_KEY);
+        document.body.classList.remove("admin-mode-on");
+        document.getElementById("admin-bar").classList.remove("show");
+        document.getElementById("admin-trigger").classList.remove("admin-hidden");
+        hideSecToolbar();
+    }
+
+    /* ---------------------------------------------------------------------
+       9. HOVER TOOLBAR OVER SECTIONS
+       ------------------------------------------------------------------- */
+    var secToolbar, activeSectionId;
+    function bindSectionHover() {
+        secToolbar = document.getElementById("admin-sec-toolbar");
+        document.addEventListener("mouseover", onSectionHover);
+        secToolbar.addEventListener("mouseleave", hideSecToolbarDelayed);
+        secToolbar.addEventListener("click", onToolbarClick);
+    }
+    function onSectionHover(e) {
+        if (!document.body.classList.contains("admin-mode-on")) return;
+        var sec = e.target.closest("section[data-admin-section]");
+        if (!sec) return;
+        if (secToolbar.matches(":hover")) return;
+        showSecToolbar(sec);
+    }
+    function showSecToolbar(sec) {
+        activeSectionId = sec.getAttribute("data-admin-section");
+        var r = sec.getBoundingClientRect();
+        secToolbar.style.top = Math.max(8, r.top + 8) + "px";
+        secToolbar.style.left = Math.min(window.innerWidth - 210, r.right - 210) + "px";
+        secToolbar.classList.add("show");
+        document.querySelectorAll(".admin-highlight-outline").forEach(function (n) { n.classList.remove("admin-highlight-outline"); });
+        sec.classList.add("admin-highlight-outline");
+        var hideBtn = secToolbar.querySelector('[data-act="hide"] i');
+        hideBtn.className = STORE.hiddenSections.indexOf(activeSectionId) !== -1 ? "fas fa-eye-slash" : "fas fa-eye";
+    }
+    function hideSecToolbarDelayed() { setTimeout(hideSecToolbar, 150); }
+    function hideSecToolbar() {
+        if (!secToolbar) return;
+        secToolbar.classList.remove("show");
+        document.querySelectorAll(".admin-highlight-outline").forEach(function (n) { n.classList.remove("admin-highlight-outline"); });
+    }
+    function onToolbarClick(e) {
+        var btn = e.target.closest("button[data-act]");
+        if (!btn || !activeSectionId) return;
+        var act = btn.getAttribute("data-act");
+        if (act === "edit") openEditor(activeSectionId);
+        if (act === "up") moveSection(activeSectionId, -1);
+        if (act === "down") moveSection(activeSectionId, 1);
+        if (act === "dup") duplicateSection(activeSectionId);
+        if (act === "hide") toggleHidden(activeSectionId);
+        if (act === "del") deleteSection(activeSectionId);
+    }
+
+    /* ---------------------------------------------------------------------
+       10. SECTION ACTIONS
+       ------------------------------------------------------------------- */
+    function moveSection(id, dir) {
+        var arr = STORE.sectionOrder.filter(function (x) { return STORE.deletedSections.indexOf(x) === -1; });
+        var i = arr.indexOf(id);
+        var j = i + dir;
+        if (i === -1 || j < 0 || j >= arr.length) return;
+        var tmp = arr[i]; arr[i] = arr[j]; arr[j] = tmp;
+        STORE.sectionOrder = arr;
+        applyStore();
+        toast("Section order updated.");
+        renderManageSectionsIfOpen();
+    }
+
+    function toggleHidden(id) {
+        var idx = STORE.hiddenSections.indexOf(id);
+        if (idx === -1) STORE.hiddenSections.push(id); else STORE.hiddenSections.splice(idx, 1);
+        applyStore();
+        toast(idx === -1 ? "Section hidden from visitors." : "Section is visible again.");
+        renderManageSectionsIfOpen();
+    }
+
+    function deleteSection(id) {
+        if (!confirm("Delete this section? You can restore it later from Manage Sections.")) return;
+        if (STORE.deletedSections.indexOf(id) === -1) STORE.deletedSections.push(id);
+        applyStore();
+        hideSecToolbar();
+        toast("Section deleted.");
+        renderManageSectionsIfOpen();
+    }
+
+    function restoreSection(id) {
+        STORE.deletedSections = STORE.deletedSections.filter(function (x) { return x !== id; });
+        applyStore();
+        toast("Section restored.");
+        renderManageSectionsIfOpen();
+    }
+
+    function duplicateSection(id) {
+        var original = document.getElementById(id);
+        if (!original) return;
+        var newId = id + "_copy_" + Date.now().toString(36);
+        if (STORE.customSections[id]) {
+            // duplicating a custom section: clone its config
+            var cfg = JSON.parse(JSON.stringify(STORE.customSections[id]));
+            cfg.title = cfg.title + " (Copy)";
+            STORE.customSections[newId] = cfg;
+        } else {
+            // duplicating an original section: store its rendered HTML as a "custom" copy
+            var clone = original.cloneNode(true);
+            clone.removeAttribute("id");
+            STORE.customSections[newId] = {
+                type: "raw",
+                title: sectionName(id) + " (Copy)",
+                rawHtml: clone.outerHTML
+            };
+        }
+        var pos = STORE.sectionOrder.indexOf(id);
+        STORE.sectionOrder.splice(pos + 1, 0, newId);
+        applyStore();
+        toast("Section duplicated.");
+        renderManageSectionsIfOpen();
+    }
+
+    /* ---------------------------------------------------------------------
+       11. GENERIC CONTENT EDITOR (text + add/remove/reorder cards + images)
+       ------------------------------------------------------------------- */
+    function findRepeatList(container) {
+        // find a child container whose children share >=2 matching classNames
+        var candidates = container.querySelectorAll("*");
+        var best = null, bestCount = 0;
+        candidates.forEach(function (node) {
+            var kids = Array.prototype.filter.call(node.children, function (c) { return c.tagName !== "STYLE" && c.tagName !== "SCRIPT"; });
+            if (kids.length < 2) return;
+            var sig = {};
+            kids.forEach(function (k) { var s = k.className || k.tagName; sig[s] = (sig[s] || 0) + 1; });
+            var topSig = Object.keys(sig).sort(function (a, b) { return sig[b] - sig[a]; })[0];
+            if (sig[topSig] >= 2 && sig[topSig] > bestCount) {
+                bestCount = sig[topSig];
+                best = { node: node, className: topSig };
+            }
+        });
+        return best;
+    }
+
+    function openEditor(id) {
+        var sectionEl = document.getElementById(id);
+        if (!sectionEl) return;
+        var root = sectionEl.querySelector(":scope > .container") || sectionEl.firstElementChild;
+        if (!root) { toast("Nothing editable was found in this section.", true); return; }
+
+        var clone = root.cloneNode(true);
+        clone.querySelectorAll("[id]").forEach(function (n) { n.removeAttribute("id"); });
+        clone.querySelectorAll("style,script").forEach(function (n) { n.remove(); });
+
+        openModal(
+            '<div class="admin-modal-header"><h3><i class="fas fa-pen"></i> Edit: ' + sectionName(id) + '</h3>' +
+            '<button class="admin-modal-close"><i class="fas fa-xmark"></i></button></div>' +
+            '<div class="admin-modal-body">' +
+            '  <div class="admin-edit-toolbar">' +
+            '    <button class="admin-btn admin-btn-sm" id="admin-add-item"><i class="fas fa-plus"></i> Add Card / Item</button>' +
+            '  </div>' +
+            '  <div class="admin-hint" style="margin-bottom:12px;">Click any text to edit it directly. Hover a card to reveal delete &amp; drag-to-reorder. Click an image to change its URL.</div>' +
+            '  <div id="admin-edit-area" contenteditable="true"></div>' +
+            '</div>' +
+            '<div class="admin-modal-footer">' +
+            '  <button class="admin-btn" id="admin-edit-cancel">Cancel</button>' +
+            '  <button class="admin-btn admin-btn-primary" id="admin-edit-save"><i class="fas fa-check"></i> Save Changes</button>' +
+            '</div>',
+            "xl"
+        );
+
+        var area = document.getElementById("admin-edit-area");
+        area.appendChild(clone);
+
+        var list = findRepeatList(area);
+        decorateListItems(list);
+
+        // image click-to-change
+        area.addEventListener("click", function (e) {
+            var img = e.target.closest("img");
+            if (img) {
+                e.preventDefault();
+                var url = prompt("Image URL (or path):", img.getAttribute("src") || "");
+                if (url) img.setAttribute("src", url);
+            }
+        });
+
+        document.getElementById("admin-add-item").addEventListener("click", function () {
+            var l = findRepeatList(area);
+            if (!l || !l.node.lastElementChild) { toast("No card pattern found to duplicate in this section.", true); return; }
+            var newItem = l.node.lastElementChild.cloneNode(true);
+            l.node.appendChild(newItem);
+            decorateListItems(l);
+            newItem.scrollIntoView({ behavior: "smooth", block: "center" });
+            toast("New item added — edit its text, then Save.");
+        });
+
+        document.getElementById("admin-edit-cancel").onclick = closeModal;
+        document.getElementById("admin-edit-save").onclick = function () {
+            area.querySelectorAll(".admin-item-del,.admin-item-handle").forEach(function (n) { n.remove(); });
+            area.querySelectorAll("[draggable]").forEach(function (n) { n.removeAttribute("draggable"); });
+            STORE.contentEdits[id] = area.innerHTML;
+            applyStore();
+            closeModal();
+            toast("Section content saved.");
+        };
+    }
+
+    function decorateListItems(list) {
+        if (!list) return;
+        Array.prototype.forEach.call(list.node.children, function (item) {
+            if (item.tagName === "STYLE" || item.tagName === "SCRIPT") return;
+            item.style.position = item.style.position || "relative";
+            item.setAttribute("draggable", "true");
+            if (!item.querySelector(":scope > .admin-item-del")) {
+                var del = document.createElement("button");
+                del.className = "admin-item-del";
+                del.innerHTML = '<i class="fas fa-xmark"></i>';
+                del.type = "button";
+                del.style.cssText = "position:absolute;top:6px;right:6px;z-index:20;width:26px;height:26px;border-radius:50%;border:none;background:#ff5252;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;";
+                del.addEventListener("click", function (e) {
+                    e.preventDefault(); e.stopPropagation();
+                    if (list.node.children.length <= 1) { toast("At least one item must remain.", true); return; }
+                    item.remove();
+                });
+                item.appendChild(del);
+            }
+            if (!item.querySelector(":scope > .admin-item-handle")) {
+                var handle = document.createElement("div");
+                handle.className = "admin-item-handle";
+                handle.innerHTML = '<i class="fas fa-up-down-left-right"></i>';
+                handle.style.cssText = "position:absolute;top:6px;left:6px;z-index:20;width:26px;height:26px;border-radius:50%;background:rgba(108,99,255,0.9);color:#fff;display:flex;align-items:center;justify-content:center;cursor:grab;font-size:0.7rem;";
+                item.appendChild(handle);
+            }
+        });
+        var dragEl = null;
+        list.node.addEventListener("dragstart", function (e) {
+            var it = e.target.closest("[draggable='true']");
+            if (!it) return;
+            dragEl = it; it.classList.add("dragging");
+        });
+        list.node.addEventListener("dragend", function (e) {
+            var it = e.target.closest("[draggable='true']");
+            if (it) it.classList.remove("dragging");
+        });
+        list.node.addEventListener("dragover", function (e) {
+            e.preventDefault();
+            var over = e.target.closest("[draggable='true']");
+            if (!over || over === dragEl || !dragEl) return;
+            var rect = over.getBoundingClientRect();
+            var before = (e.clientY - rect.top) < rect.height / 2;
+            list.node.insertBefore(dragEl, before ? over : over.nextSibling);
+        });
+    }
+
+    /* ---------------------------------------------------------------------
+       12. MANAGE SECTIONS MODAL
+       ------------------------------------------------------------------- */
+    function renderManageSectionsIfOpen() {
+        if (document.getElementById("admin-section-list")) renderManageSections();
+    }
+    function openManageSections() {
+        openModal(
+            '<div class="admin-modal-header"><h3><i class="fas fa-layer-group"></i> Manage Sections</h3>' +
+            '<button class="admin-modal-close"><i class="fas fa-xmark"></i></button></div>' +
+            '<div class="admin-modal-body">' +
+            '  <div class="admin-hint" style="margin-bottom:14px;">Drag to reorder, or use the arrows. Changes apply instantly to the live page.</div>' +
+            '  <div class="admin-section-list" id="admin-section-list"></div>' +
+            '  <h4 style="margin:22px 0 10px;font-size:0.85rem;color:var(--text-light);text-transform:uppercase;letter-spacing:.05em;">Deleted (recoverable)</h4>' +
+            '  <div class="admin-section-list" id="admin-deleted-list"></div>' +
+            '</div>' +
+            '<div class="admin-modal-footer"><button class="admin-btn admin-btn-primary" id="admin-manage-close">Done</button></div>',
+            "lg"
+        );
+        document.getElementById("admin-manage-close").onclick = closeModal;
+        renderManageSections();
+    }
+    function renderManageSections() {
+        var listEl = document.getElementById("admin-section-list");
+        var delEl = document.getElementById("admin-deleted-list");
+        var active = STORE.sectionOrder.filter(function (id) { return STORE.deletedSections.indexOf(id) === -1 && document.getElementById(id); });
+        listEl.innerHTML = active.map(function (id) {
+            var kind = STORE.customSections[id] ? "Custom" : "Original";
+            var hidden = STORE.hiddenSections.indexOf(id) !== -1;
+            return '<div class="admin-section-item' + (hidden ? " hidden-row" : "") + '" draggable="true" data-id="' + id + '">' +
+                '<i class="fas fa-grip-vertical"></i>' +
+                '<span class="name">' + sectionName(id) + '</span>' +
+                '<span class="tag">' + kind + '</span>' +
+                '<div class="row-actions">' +
+                '<button data-act="up" title="Move up"><i class="fas fa-arrow-up"></i></button>' +
+                '<button data-act="down" title="Move down"><i class="fas fa-arrow-down"></i></button>' +
+                '<button data-act="edit" title="Edit"><i class="fas fa-pen"></i></button>' +
+                '<button data-act="dup" title="Duplicate"><i class="fas fa-clone"></i></button>' +
+                '<button data-act="hide" title="Hide/Show"><i class="fas ' + (hidden ? "fa-eye-slash" : "fa-eye") + '"></i></button>' +
+                '<button data-act="del" title="Delete"><i class="fas fa-trash"></i></button>' +
+                "</div></div>";
+        }).join("") || '<div class="admin-hint">No sections yet.</div>';
+
+        delEl.innerHTML = STORE.deletedSections.map(function (id) {
+            return '<div class="admin-section-item" data-id="' + id + '">' +
+                '<span class="name">' + sectionName(id) + '</span>' +
+                '<span class="tag">Deleted</span>' +
+                '<div class="row-actions"><button data-act="restore" title="Restore"><i class="fas fa-rotate-left"></i></button></div></div>';
+        }).join("") || '<div class="admin-hint">Nothing deleted.</div>';
+
+        listEl.querySelectorAll("button[data-act]").forEach(function (btn) {
+            btn.addEventListener("click", function () {
+                var id = btn.closest("[data-id]").getAttribute("data-id");
+                var act = btn.getAttribute("data-act");
+                if (act === "up") moveSection(id, -1);
+                if (act === "down") moveSection(id, 1);
+                if (act === "edit") openEditor(id);
+                if (act === "dup") duplicateSection(id);
+                if (act === "hide") toggleHidden(id);
+                if (act === "del") deleteSection(id);
+            });
+        });
+        delEl.querySelectorAll("button[data-act='restore']").forEach(function (btn) {
+            btn.addEventListener("click", function () {
+                restoreSection(btn.closest("[data-id]").getAttribute("data-id"));
+            });
+        });
+
+        var dragEl = null;
+        listEl.querySelectorAll(".admin-section-item").forEach(function (row) {
+            row.addEventListener("dragstart", function () { dragEl = row; row.classList.add("dragging"); });
+            row.addEventListener("dragend", function () { row.classList.remove("dragging"); });
+            row.addEventListener("dragover", function (e) {
+                e.preventDefault();
+                if (!dragEl || dragEl === row) return;
+                var rect = row.getBoundingClientRect();
+                var before = (e.clientY - rect.top) < rect.height / 2;
+                listEl.insertBefore(dragEl, before ? row : row.nextSibling);
+            });
+            row.addEventListener("drop", function () {
+                var newOrder = Array.prototype.map.call(listEl.querySelectorAll("[data-id]"), function (r) { return r.getAttribute("data-id"); });
+                var deleted = STORE.sectionOrder.filter(function (id) { return STORE.deletedSections.indexOf(id) !== -1; });
+                STORE.sectionOrder = newOrder.concat(deleted);
+                applyStore();
+                toast("Section order updated.");
+            });
+        });
+    }
+
+    /* ---------------------------------------------------------------------
+       13. TEMPLATE GALLERY + SECTION BUILDER
+       ------------------------------------------------------------------- */
+    var TEMPLATES = [
+        { id: "hero", name: "Hero Section", icon: "fa-house" },
+        { id: "about", name: "About Section", icon: "fa-user" },
+        { id: "experience", name: "Experience Timeline", icon: "fa-briefcase" },
+        { id: "education", name: "Education", icon: "fa-graduation-cap" },
+        { id: "skills", name: "Skills", icon: "fa-code" },
+        { id: "projects", name: "Projects Grid", icon: "fa-diagram-project" },
+        { id: "certificates", name: "Certificates", icon: "fa-certificate" },
+        { id: "services", name: "Services", icon: "fa-toolbox" },
+        { id: "techstack", name: "Tech Stack", icon: "fa-layer-group" },
+        { id: "achievements", name: "Achievements", icon: "fa-trophy" },
+        { id: "gallery", name: "Gallery", icon: "fa-images" },
+        { id: "testimonials", name: "Testimonials", icon: "fa-quote-left" },
+        { id: "blog", name: "Blog", icon: "fa-newspaper" },
+        { id: "contact", name: "Contact", icon: "fa-envelope" },
+        { id: "blank", name: "Custom Blank Section", icon: "fa-square-plus" }
+    ];
+    var ACCENTS = ["#6C63FF", "#FF6584", "#5EEAD4", "#A78BFA", "#F59E0B", "#22C55E"];
+
+    function openTemplateGallery() {
+        openModal(
+            '<div class="admin-modal-header"><h3><i class="fas fa-wand-magic-sparkles"></i> Add a New Section</h3>' +
+            '<button class="admin-modal-close"><i class="fas fa-xmark"></i></button></div>' +
+            '<div class="admin-modal-body">' +
+            '  <div class="admin-template-grid">' +
+            TEMPLATES.map(function (t, i) {
+                var c = ACCENTS[i % ACCENTS.length];
+                return '<div class="admin-template-card" style="--tpl-accent:' + c + ';" data-tpl="' + t.id + '"><i class="fas ' + t.icon + '"></i><span>' + t.name + "</span></div>";
+            }).join("") +
+            "  </div></div>",
+            "lg"
+        );
+        document.querySelectorAll(".admin-template-card").forEach(function (card) {
+            card.addEventListener("click", function () {
+                openTemplateConfig(card.getAttribute("data-tpl"));
+            });
+        });
+    }
+
+    function openTemplateConfig(tplId) {
+        var tpl = TEMPLATES.find(function (t) { return t.id === tplId; });
+        openModal(
+            '<div class="admin-modal-header"><h3><i class="fas ' + tpl.icon + '"></i> Configure: ' + tpl.name + '</h3>' +
+            '<button class="admin-modal-close"><i class="fas fa-xmark"></i></button></div>' +
+            '<div class="admin-modal-body">' +
+            '  <div class="admin-field"><label>Section Title</label><input type="text" id="cfg-title" value="' + tpl.name + '"></div>' +
+            '  <div class="admin-field"><label>Subtitle</label><input type="text" id="cfg-subtitle" placeholder="Optional subtitle"></div>' +
+            '  <div class="admin-field"><label>Description</label><textarea id="cfg-desc" placeholder="Short description shown under the title"></textarea></div>' +
+            '  <div class="admin-field-row">' +
+            '    <div class="admin-field"><label>Number of Cards / Items</label><input type="number" id="cfg-count" min="1" max="12" value="3"></div>' +
+            '    <div class="admin-field"><label>Background Style</label><select id="cfg-bg">' +
+            '      <option value="dark">Dark</option><option value="darker">Darker</option><option value="glass">Glass / Mesh</option>' +
+            "    </select></div>" +
+            "  </div>" +
+            '  <div class="admin-field-row">' +
+            '    <div class="admin-field"><label>Animation Style</label><select id="cfg-anim">' +
+            '      <option value="fade-in">Fade In</option><option value="fade-in delay-1">Fade In (Delayed)</option>' +
+            "    </select></div>" +
+            '    <div class="admin-field"><label>Accent Color</label><div class="admin-color-swatches" id="cfg-accent">' +
+            ACCENTS.map(function (c, i) { return '<div class="admin-swatch' + (i === 0 ? " active" : "") + '" style="background:' + c + ';color:' + c + '" data-color="' + c + '"></div>'; }).join("") +
+            "</div></div>" +
+            "  </div>" +
+            "</div>" +
+            '<div class="admin-modal-footer">' +
+            '  <button class="admin-btn" id="cfg-back">Back</button>' +
+            '  <button class="admin-btn admin-btn-primary" id="cfg-create"><i class="fas fa-check"></i> Create Section</button>' +
+            "</div>",
+            "md"
+        );
+        var accent = ACCENTS[0];
+        document.querySelectorAll("#cfg-accent .admin-swatch").forEach(function (sw) {
+            sw.addEventListener("click", function () {
+                document.querySelectorAll("#cfg-accent .admin-swatch").forEach(function (s) { s.classList.remove("active"); });
+                sw.classList.add("active");
+                accent = sw.getAttribute("data-color");
+            });
+        });
+        document.getElementById("cfg-back").onclick = openTemplateGallery;
+        document.getElementById("cfg-create").onclick = function () {
+            var cfg = {
+                type: tplId,
+                title: document.getElementById("cfg-title").value || tpl.name,
+                subtitle: document.getElementById("cfg-subtitle").value,
+                description: document.getElementById("cfg-desc").value,
+                count: parseInt(document.getElementById("cfg-count").value, 10) || 3,
+                bg: document.getElementById("cfg-bg").value,
+                anim: document.getElementById("cfg-anim").value,
+                accent: accent
+            };
+            var id = "custom_" + tplId + "_" + Date.now().toString(36);
+            STORE.customSections[id] = cfg;
+            STORE.sectionOrder.push(id);
+            applyStore();
+            closeModal();
+            toast("Section created! Scroll down to see it — click Edit to fine-tune content.");
+            document.getElementById(id).scrollIntoView({ behavior: "smooth", block: "center" });
+        };
+    }
+
+    function bgClass(bg) {
+        if (bg === "darker") return "background:var(--darker-bg);";
+        if (bg === "glass") return "background:var(--gradient-mesh), var(--dark-bg);";
+        return "background:var(--dark-bg);";
+    }
+
+    var CARD_ICONS = ["fa-star", "fa-bolt", "fa-rocket", "fa-gem", "fa-fire", "fa-award", "fa-lightbulb", "fa-shield-halved", "fa-compass", "fa-wand-magic-sparkles", "fa-puzzle-piece", "fa-chart-line"];
+
+    function cardHtml(cfg, i) {
+        var icon = CARD_ICONS[i % CARD_ICONS.length];
+        return '<div class="fade-in admin-gen-card" style="--card-accent:' + cfg.accent + ';">' +
+            '<span class="gen-badge">0' + (i + 1) + "</span>" +
+            '<div class="gen-icon"><i class="fas ' + icon + '"></i></div>' +
+            "<h3>Item " + (i + 1) + "</h3>" +
+            "<p>Editable description for this item. Click Edit on this section to customize the text, icon and image.</p>" +
+            "</div>";
+    }
+
+    function renderTemplate(cfg) {
+        if (cfg.type === "raw") {
+            return cfg.rawHtml;
+        }
+        var cards = "";
+        for (var i = 0; i < (cfg.count || 3); i++) cards += cardHtml(cfg, i);
+        var gridStyle = "display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:24px;margin-top:36px;";
+        var header =
+            '<h2 class="section-title fade-in" style="color:#fff;">' + escapeHtml(cfg.title) + "</h2>" +
+            (cfg.subtitle ? '<p class="fade-in" style="text-align:center;color:' + cfg.accent + ';font-weight:600;margin-top:-14px;margin-bottom:14px;">' + escapeHtml(cfg.subtitle) + "</p>" : "") +
+            (cfg.description ? '<p class="fade-in" style="text-align:center;color:var(--text-light);max-width:640px;margin:0 auto;">' + escapeHtml(cfg.description) + "</p>" : "");
+
+        var inner;
+        if (cfg.type === "hero") {
+            inner = '<div style="display:flex;flex-direction:column;align-items:center;text-align:center;padding:60px 0;">' +
+                '<h1 class="' + cfg.anim + '" style="font-family:var(--font-display);font-size:2.6rem;color:#fff;">' + escapeHtml(cfg.title) + "</h1>" +
+                '<p class="fade-in" style="color:var(--text-light);max-width:600px;margin-top:14px;">' + escapeHtml(cfg.description || cfg.subtitle || "") + "</p>" +
+                '<a href="#projects" class="btn ' + cfg.anim + '" style="margin-top:24px;">Explore</a></div>';
+        } else if (cfg.type === "testimonials" || cfg.type === "blog" || cfg.type === "gallery") {
+            inner = header + '<div style="' + gridStyle + '">' + cards + "</div>";
+        } else if (cfg.type === "contact") {
+            inner = header + '<div class="fade-in" style="max-width:520px;margin:36px auto 0;text-align:center;color:var(--text-light);">Add your contact details, links or a custom form here after creating the section.</div>';
+        } else if (cfg.type === "blank") {
+            inner = '<h2 class="section-title fade-in" style="color:#fff;">' + escapeHtml(cfg.title) + "</h2>" +
+                '<div class="fade-in" style="color:var(--text-light);text-align:center;max-width:640px;margin:0 auto;">' + (escapeHtml(cfg.description) || "Start building — click Edit to add your own content and cards.") + "</div>";
+        } else {
+            inner = header + '<div style="' + gridStyle + '">' + cards + "</div>";
+        }
+
+        return '<section style="' + bgClass(cfg.bg) + 'padding:70px 0;"><div class="container" style="max-width:1140px;margin:0 auto;padding:0 24px;">' + inner + "</div></section>";
+    }
+
+    function escapeHtml(s) {
+        return (s || "").replace(/[&<>"']/g, function (c) {
+            return ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c];
+        });
+    }
+
+    /* ---------------------------------------------------------------------
+       14. EXPORT / IMPORT
+       ------------------------------------------------------------------- */
+    function exportData() {
+        var blob = new Blob([JSON.stringify(STORE, null, 2)], { type: "application/json" });
+        var a = document.createElement("a");
+        a.href = URL.createObjectURL(blob);
+        a.download = "portfolio-admin-data.json";
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        toast("Exported. Keep this file safe — it's your backup.");
+    }
+    function importData(file) {
+        var reader = new FileReader();
+        reader.onload = function () {
+            try {
+                var data = JSON.parse(reader.result);
+                STORE = Object.assign(defaultStore(), data);
+                applyStore();
+                toast("Import successful.");
+            } catch (e) {
+                toast("Invalid file.", true);
+            }
+        };
+        reader.readAsText(file);
+    }
+
+    /* ---------------------------------------------------------------------
+       15. WIRE UP
+       ------------------------------------------------------------------- */
+    function bindBaseUI() {
+        document.getElementById("admin-trigger").addEventListener("click", openLogin);
+        document.getElementById("admin-exit").addEventListener("click", exitAdminMode);
+        document.getElementById("admin-add-section").addEventListener("click", openTemplateGallery);
+        document.getElementById("admin-manage-sections").addEventListener("click", openManageSections);
+        document.getElementById("admin-export").addEventListener("click", exportData);
+        document.getElementById("admin-import").addEventListener("click", function () { document.getElementById("admin-import-file").click(); });
+        document.getElementById("admin-import-file").addEventListener("change", function (e) {
+            if (e.target.files[0]) importData(e.target.files[0]);
+            e.target.value = "";
+        });
+    }
+
+    /* ---------------------------------------------------------------------
+       16. INIT
+       ------------------------------------------------------------------- */
+    function init() {
+        buildBaseUI();
+        bindBaseUI();
+        applyStore();
+        if (sessionStorage.getItem(SESSION_KEY) === "1") enterAdminMode();
+    }
+
+    if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", init);
+    } else {
+        init();
+    }
+})();
+
 </script>
 </body>
 </html>
-
